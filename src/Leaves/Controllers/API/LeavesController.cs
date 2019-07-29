@@ -56,7 +56,7 @@ namespace Leaves.Controllers.API
 
                 result.Add(new LeaveDto(leaveDatum)
                 {
-                    EmployeeName = user?.FirstName
+                    //EmployeeName = user?.FirstName
                 });
             }
 
@@ -108,7 +108,9 @@ namespace Leaves.Controllers.API
                 return this.NotFound(new { success = false });
 
             // TODO : find correct Employee ID from Username
-            leave.ScrumMasterApproved(0);
+            leave.ScrumMasterApproved(10, GetCurrentUserName());
+
+            this.Storage.Save();
 
             return Ok(new { success = true});
         }

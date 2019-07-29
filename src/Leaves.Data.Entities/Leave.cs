@@ -27,53 +27,61 @@ namespace Leaves.Data.Entities
 
         public virtual ICollection<LeaveApprovalHistory> ApprovalHistory { get; set; }
 
-        public bool HumanResourceDeptApproved(int hrStaffEmployeeId)
+        public bool HumanResourceDeptApproved(int hrStaffEmployeeId, string currentUsername)
         {
             this.ApprovalHistory.Add(new LeaveApprovalHistory
             {
                 ApprovalDate = DateTime.Now,
                 ApprovalStatus = ApprovalStatus.ApprovedByHR,
                 Leave = this,
-                EmployeeId = hrStaffEmployeeId
+                EmployeeId = hrStaffEmployeeId,
+                CreatedBy = currentUsername,
+                Created = DateTime.Now
             });
 
             return true;
         }
 
-        public bool HumanResourceDeptRejected(int hrStaffEmployeeId)
+        public bool HumanResourceDeptRejected(int hrStaffEmployeeId, string currentUsername)
         {
             this.ApprovalHistory.Add(new LeaveApprovalHistory
             {
                 ApprovalDate = DateTime.Now,
                 ApprovalStatus = ApprovalStatus.RejectedbyHR,
                 Leave = this,
-                EmployeeId = hrStaffEmployeeId
+                EmployeeId = hrStaffEmployeeId,
+                CreatedBy = currentUsername,
+                Created = DateTime.Now
             });
 
             return true;
         }
 
-        public bool ScrumMasterApproved(int scrumMasterEmployeeId)
+        public bool ScrumMasterApproved(int scrumMasterEmployeeId, string currentUsername)
         {
             this.ApprovalHistory.Add(new LeaveApprovalHistory
             {
                 ApprovalDate = DateTime.Now,
                 ApprovalStatus = ApprovalStatus.ApprovedBySM,
                 Leave = this,
-                EmployeeId = scrumMasterEmployeeId
+                EmployeeId = scrumMasterEmployeeId,
+                Created = DateTime.Now,
+                CreatedBy = currentUsername
             });
 
             return true;
         }
 
-        public bool ScrumMasterRejected(int scrumMasterEmployeeId)
+        public bool ScrumMasterRejected(int scrumMasterEmployeeId, string currentUsername)
         {
             this.ApprovalHistory.Add(new LeaveApprovalHistory
             {
                 ApprovalDate = DateTime.Now,
                 ApprovalStatus = ApprovalStatus.RejectedBySM,
                 Leave = this,
-                EmployeeId = scrumMasterEmployeeId
+                EmployeeId = scrumMasterEmployeeId,
+                CreatedBy = currentUsername,
+                Created = DateTime.Now
             });
 
             return true;

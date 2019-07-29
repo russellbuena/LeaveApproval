@@ -12,7 +12,7 @@ namespace Data.EntityFramework.SqlServer
     {
         public virtual IEnumerable<TEntity> All(IQueryable<TEntity> query, int page = 0, int size = 25)
         {
-            return query.OrderByDescending(e => e.Created).Skip(page * size).Take(size);
+            return query.OrderByDescending(e => e.Created).Skip(page * size).Take(size).ToList();
         }
 
         public IQueryable<TEntity> Query => dbSet;
