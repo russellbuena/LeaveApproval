@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Leaves.ViewModels;
 using System;
 using Leaves.ViewModels.Leave;
+using Employees.Data.Abstractions;
 
 namespace Leaves.Controllers.API
 {   
@@ -24,6 +25,7 @@ namespace Leaves.Controllers.API
         [HttpGet]
         public IActionResult Get(int page = 0, int size = 25)
         {
+            
             var data = new LeaveModelFactory().LoadAll(Storage, page, size)?.Leaves;
             int count = data.Count();
 
@@ -34,6 +36,31 @@ namespace Leaves.Controllers.API
                 count,
                 totalPage = ((int)count / size) + 1
             });
+        }
+
+        [HttpGet("sample-get-leave-index")]
+        public IActionResult GetLeaveIndex([FromQuery] int page = 0, [FromQuery] int size = 25)
+        {
+            var leaveRepository = Storage.GetRepository<ILeavesRepository>();
+            var leaveQuery = leaveRepository.Query;
+            var leaveData = leaveRepository.All(leaveQuery, page, size);
+            var userIds = leaveData.Select(s => s.EmployeeId).ToList();
+
+            var employeeRepository = Storage.GetRepository<IEmployeeRepository>();
+            var users = employeeRepository.All(employeeRepository.Query.Where(w => userIds.Contains(w.Id)), 0, int.MaxValue);
+
+            var result = new List<LeaveDto>();
+            foreach (var leaveDatum in leaveData)
+            {
+                var user = users.FirstOrDefault(f => f.Id.Equals(leaveDatum.EmployeeId));
+
+                result.Add(new LeaveDto(leaveDatum)
+                {
+                    EmployeeName = user?.FirstName
+                });
+            }
+
+            return Ok(result);
         }
 
 
@@ -70,7 +97,7 @@ namespace Leaves.Controllers.API
         }
 
         [HttpPost("{id:int}/approveby-sm")]
-        public IActionResult ApproveByScrumMaster(int id)
+        public IActionResult ApproveByScrumMaster([FromRoute]int id)
         {
             var username = this.GetCurrentUserName();
 

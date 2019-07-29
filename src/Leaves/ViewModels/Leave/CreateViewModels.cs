@@ -9,45 +9,31 @@ namespace Leaves.ViewModels
     public class CreateViewModels
     {
 
-        //[Display(Name = "Leave Type")]
-        // [Required()]
         public LeaveType LeaveType { get; set; }
 
-        //[Display(Name = "Start Date")]
-        // [Required()]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
-        //[Display(Name ="End Date")]
-        // [Required()]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
-        //[Display(Name = "TotalLeaveTaken")]
-        // [Required()]
         public double TotalLeaveTaken { get; set; }
 
-        //[Display(Name = "Purpose")]
-       // [Required()]
         public string Purpose { get; set; }
 
-        //[Display(Name = "JobOverTo")]
-       // [Required()]
         public string JobOverTo { get; set; }
 
-        //[Display(Name = "Project")]
-       // [Required()]
         public string Project { get; set; }
 
-        //[Display(Name = "Scrum Master")]
-       // [Required()]
         public string SM { get; set; }
 
+        public int EmployeeId { get; set; }
 
         internal Data.Entities.Leave ToEntity()
         {
-            if(IsValidLeaveRequestByLeaveType(this))
-               if(IsValidLeaveRequestByRequestDateCombination(this.StartDate,this.EndDate))
+            if (IsValidLeaveRequestByLeaveType(this))
+                if (IsValidLeaveRequestByRequestDateCombination(this.StartDate, this.EndDate))
+                    //if(IsValidSickLeave(this))
                     return new Data.Entities.Leave
                     {
                         LeaveType = this.LeaveType,
@@ -57,16 +43,17 @@ namespace Leaves.ViewModels
                         Purpose = this.Purpose,
                         JobOverTo = this.JobOverTo,
                         Project = this.Project,
+                        EmployeeId = this.EmployeeId
                     };
             return null;
         }
 
         /*Valid Requirement:
             - Only sick leave request is allowed to request on the day of leave*/
-        
+
         internal bool IsValidLeaveRequestByLeaveType(CreateViewModels LeaveData)
         {
-            if(LeaveData.LeaveType != LeaveType.Sick_Leave)
+            if (LeaveData.LeaveType != LeaveType.Sick_Leave)
             {
                 if (LeaveData.StartDate.Date == DateTime.Now.Date)
                 {
@@ -77,9 +64,14 @@ namespace Leaves.ViewModels
 
             return true;
         }
+        internal bool IsValidSickLeave(CreateViewModels SickLeave)
+        {
+            var startDateSick = StartDate.Date;
+            return SickLeave.StartDate.Date == DateTime.Now.Date;
+        }
 
 
-        internal bool IsValidLeaveRequestByRequestDateCombination(DateTime startDate,DateTime endDate)
+        internal bool IsValidLeaveRequestByRequestDateCombination(DateTime startDate, DateTime endDate)
         {
             var dateOnlyStartDate = startDate.Date;
             var dateOnlyEndDate = endDate.Date;
@@ -87,8 +79,8 @@ namespace Leaves.ViewModels
             return true;
         }
 
-        
+
     }
 
-   }
+}
 

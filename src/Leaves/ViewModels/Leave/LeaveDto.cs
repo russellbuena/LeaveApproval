@@ -6,17 +6,17 @@ namespace Leaves.ViewModels.Leave
 {
     public class LeaveDto
     {
-        public LeaveDto(Data.Entities.Leave leave, Employee employee )
+        public LeaveDto(Data.Entities.Leave leave)
         {
-            EmployeeName = employee.FirstName;
+            //EmployeeName = employee.FirstName;
             Id = leave.Id;
 
-            
         }
 
-        public string EmployeeName { get; }
+        public string EmployeeName { get; set; }
         public int Id { get; }
-        
-        
+
+
+
     }
 }
