@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using Leaves.Data.Entities;
 using System.Text;
 
-namespace Leaves.ViewModels
+namespace Leaves.ViewModels.Leaves
 {
-    public class CreateViewModels
+    public class LeaveCreateViewModel
     {
 
         public LeaveType LeaveType { get; set; }
@@ -32,18 +32,18 @@ namespace Leaves.ViewModels
         internal Data.Entities.Leave ToEntity()
         {
             if (IsValidLeaveRequestByLeaveType(this))
-                if (IsValidLeaveRequestByRequestDateCombination(this.StartDate, this.EndDate))
+                if (IsValidLeaveRequestByRequestDateCombination(StartDate, EndDate))
                     //if(IsValidSickLeave(this))
                     return new Data.Entities.Leave
                     {
-                        LeaveType = this.LeaveType,
-                        StartDate = this.StartDate,
-                        EndDate = this.EndDate,
-                        TotalLeaveTaken = this.TotalLeaveTaken,
-                        Purpose = this.Purpose,
-                        JobOverTo = this.JobOverTo,
-                        Project = this.Project,
-                        EmployeeId = this.EmployeeId
+                        LeaveType = LeaveType,
+                        StartDate = StartDate,
+                        EndDate = EndDate,
+                        TotalLeaveTaken = TotalLeaveTaken,
+                        Purpose = Purpose,
+                        JobOverTo = JobOverTo,
+                        Project = Project,
+                        EmployeeId = EmployeeId
                     };
             return null;
         }
@@ -51,7 +51,7 @@ namespace Leaves.ViewModels
         /*Valid Requirement:
             - Only sick leave request is allowed to request on the day of leave*/
 
-        internal bool IsValidLeaveRequestByLeaveType(CreateViewModels LeaveData)
+        internal bool IsValidLeaveRequestByLeaveType(LeaveCreateViewModel LeaveData)
         {
             if (LeaveData.LeaveType != LeaveType.Sick_Leave)
             {
@@ -64,7 +64,7 @@ namespace Leaves.ViewModels
 
             return true;
         }
-        internal bool IsValidSickLeave(CreateViewModels SickLeave)
+        internal bool IsValidSickLeave(LeaveCreateViewModel SickLeave)
         {
             var startDateSick = StartDate.Date;
             return SickLeave.StartDate.Date == DateTime.Now.Date;

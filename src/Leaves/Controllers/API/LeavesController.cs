@@ -6,14 +6,13 @@ using Leaves.Data.Entities;
 using ExtCore.Data.Abstractions;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-
-using Leaves.ViewModels;
 using System;
 using Leaves.ViewModels.Leave;
 using Employees.Data.Abstractions;
+using Leaves.ViewModels.Leaves;
 
 namespace Leaves.Controllers.API
-{   
+{
     // [Authorize]
     [Route("api/leaves")]
     public class LeavesController : ControllerBaseApi
@@ -66,7 +65,7 @@ namespace Leaves.Controllers.API
 
 
         [HttpPost]
-        public IActionResult Post(CreateViewModels model)
+        public IActionResult Post(LeaveCreateViewModel model)
         {
             if (this.ModelState.IsValid)
                 {
@@ -161,7 +160,7 @@ namespace Leaves.Controllers.API
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult Put(int id, UpdateViewModels model)
+        public IActionResult Put(int id, LeaveUpdateViewModels model)
         {
             var repo = this.Storage.GetRepository<ILeavesRepository>();
 

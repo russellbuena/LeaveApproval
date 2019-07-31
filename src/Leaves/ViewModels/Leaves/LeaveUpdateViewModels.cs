@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Leaves.Data.Entities;
 
-namespace Leaves.Controllers.API
+namespace Leaves.ViewModels.Leaves
 {
-   public class UpdateViewModels
+    public class LeaveUpdateViewModels
     {
-        public UpdateViewModels() { }
-        private readonly Leave _entity;
+        public LeaveUpdateViewModels() { }
+        //private readonly Leave _entity;
 
         public LeaveType LeaveType { get; set; }
         [DataType(DataType.Date)]
@@ -22,16 +22,16 @@ namespace Leaves.Controllers.API
         public string Project { get; set; }
         public string SM { get; set; }
 
-        internal Leave ToEntity(Leave entity)
+        internal Data.Entities.Leave ToEntity(Data.Entities.Leave entity)
         {
-            entity.LeaveType = this.LeaveType;
+            entity.LeaveType = LeaveType;
             entity.Modified = DateTime.Now;
-            entity.StartDate = this.StartDate;
-            entity.EndDate = this.EndDate;
-            entity.TotalLeaveTaken = this.TotalLeaveTaken;
-            entity.Purpose = this.Purpose;
-            entity.JobOverTo = this.JobOverTo;
-            entity.Project = this.Project;
+            entity.StartDate = StartDate;
+            entity.EndDate = EndDate;
+            entity.TotalLeaveTaken = TotalLeaveTaken;
+            entity.Purpose = Purpose;
+            entity.JobOverTo = JobOverTo;
+            entity.Project = Project;
 
             return entity;
         }

@@ -21,22 +21,6 @@ namespace Leaves.Data.EntityFramework.SqlServer
                etb.Property(e => e.JobOverTo).HasMaxLength(60).IsRequired();
                etb.Property(e => e.Project).HasMaxLength(60).IsRequired();
             });
-
-            modelBuilder.Entity<Group>(etb =>
-            {
-                etb.ToTable("Groups");
-                etb.HasKey(e => e.Id);
-                etb.Property(e => e.Name).HasMaxLength(65).IsRequired();
-                etb.HasMany(m => m.Roles).WithOne(w => w.group).HasForeignKey(f => f.GroupId);
-            });
-
-            modelBuilder.Entity<Role>(etb =>
-            {
-                etb.ToTable("Roles");
-                etb.HasKey(e => e.Id);
-                etb.Property(e => e.Name).HasMaxLength(65).IsRequired();
-            });
-
         }
     }
 }
