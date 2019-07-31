@@ -114,9 +114,22 @@ namespace Leaves.Controllers.API
 
             return Ok(new { success = true});
         }
+        [HttpPost("{id:int}/rejectedby-sm")]
+        public IActionResult  RejectedByScrumMaster([FromRoute]int id)
+        {
+            var username = this.GetCurrentUserName();
+            var repo = this.Storage.GetRepository<ILeavesRepository>();
+            Leave leave = repo.WithKey(id);
+            if (leave == null)
+                return this.NotFound(new { success = false });
+
+            leave.ScrumMasterRejected(10, GetCurrentUserName());
+            this.Storage.Save();
+            return Ok(new { success = true });
+        }
 
         [HttpPost("{id:int}/approveby-hr")]
-        public IActionResult ApproveByHumanResourceDept(int id)
+        public IActionResult ApproveByHumanResourceDept([FromRoute]int id)
         {
             var username = this.GetCurrentUserName();
 
@@ -127,9 +140,25 @@ namespace Leaves.Controllers.API
             if (leave == null)
                 return this.NotFound(new { success = false });
 
+            leave.HumanResourceDeptApproved(20, GetCurrentUserName());
+            this.Storage.Save();
+
             return Ok(new { success = true });
         }
+        
+        [HttpPost("{id:int}/rejectedby-hr")]
+        public IActionResult RejectByHumanResourceDept([FromRoute]int id)
+        {
+            var username = this.GetCurrentUserName();
+            var repo = this.Storage.GetRepository<ILeavesRepository>();
+            Leave leave = repo.WithKey(id);
+            if (leave == null)
+                return this.NotFound(new { success = false });
+            leave.HumanResourceDeptRejected(20, GetCurrentUserName());
 
+            this.Storage.Save();
+            return Ok(new { success = true });
+        }
 
         [HttpPut("{id:int}")]
         public IActionResult Put(int id, UpdateViewModels model)

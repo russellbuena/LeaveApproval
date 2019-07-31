@@ -23,9 +23,14 @@ namespace Leaves.ViewModels.Leave
             EndDate = leave.EndDate;
             Purpose = leave.Purpose;
             TotalLeaveTaken = leave.TotalLeaveTaken;
+            JobOverTo = leave.JobOverTo;
+            Project = leave.Project;
+
+
 
 
             Id = leave.Id;
+           
 
 
         }
@@ -37,9 +42,11 @@ namespace Leaves.ViewModels.Leave
         public DateTimeOffset EndDate { get; }
         public string Purpose { get; }
         public double TotalLeaveTaken { get; }
+        public string JobOverTo { get; }
+        public string Project { get; }
         public int Id { get; }
 
-
+       
 
     }
 }

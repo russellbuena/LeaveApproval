@@ -93,9 +93,9 @@ namespace Leaves.Data.Entities
         Draft = 10,
 
         ApprovedBySM = 20,
-        ApprovedByHR,
+        ApprovedByHR = 25,
 
         RejectedBySM = 30,
-        RejectedbyHR
+        RejectedbyHR = 35,
     }
 }
