@@ -19,7 +19,7 @@ namespace Leaves.Data.EntityFramework.SqlServer
                etb.Property(e => e.LeaveType).IsRequired();
                etb.Property(e => e.Purpose).HasMaxLength(65).IsRequired();
                etb.Property(e => e.JobOverTo).HasMaxLength(60).IsRequired();
-               etb.Property(e => e.Project).HasMaxLength(60).IsRequired();
+               etb.Property(e => e.Project).HasMaxLength(60);
             });
         }
     }

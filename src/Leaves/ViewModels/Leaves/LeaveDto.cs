@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Employees.Data.Entities;
 using Leaves.Data.Entities;
 
@@ -7,6 +8,7 @@ namespace Leaves.ViewModels.Leave
 {
     public class LeaveDto
     {
+        private readonly object o;
         private Data.Entities.Leave leaveDatum;
 
         public LeaveDto(Data.Entities.Leave leaveDatum)
@@ -25,6 +27,11 @@ namespace Leaves.ViewModels.Leave
             TotalLeaveTaken = leave.TotalLeaveTaken;
             JobOverTo = leave.JobOverTo;
             Project = leave.Project;
+            IsApprovedBySM = leave.ApprovalHistory.Any(o => o.ApprovalStatus == ApprovalStatus.ApprovedBySM);
+            IsRejectedBySM = leave.ApprovalHistory.Any(o => o.ApprovalStatus == ApprovalStatus.RejectedbySM);
+            IsApprovedByHR = leave.ApprovalHistory.Any(o => o.ApprovalStatus == ApprovalStatus.ApprovedByHR);
+            IsRejectedByHR = leave.ApprovalHistory.Any(o => o.ApprovalStatus == ApprovalStatus.RejectedbyHR);
+            
 
 
 
@@ -44,6 +51,10 @@ namespace Leaves.ViewModels.Leave
         public double TotalLeaveTaken { get; }
         public string JobOverTo { get; }
         public string Project { get; }
+        public bool IsApprovedBySM { get; }
+        public bool IsRejectedBySM { get; }
+        public bool IsApprovedByHR { get; }
+        public bool IsRejectedByHR { get; }
         public int Id { get; }
 
        

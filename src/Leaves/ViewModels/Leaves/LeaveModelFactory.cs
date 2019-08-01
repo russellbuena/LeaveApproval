@@ -28,8 +28,6 @@ namespace Leaves.ViewModels.Leave
                         select new LeaveDto(l, e)).ToList();
 
             return new LeaveIndexViewModel(data);
-
-            //throw new NotImplementedException();
         }
     }
 }

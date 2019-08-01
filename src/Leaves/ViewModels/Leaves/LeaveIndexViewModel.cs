@@ -11,6 +11,7 @@ namespace Leaves.ViewModels.Leave
          
         }
         public IEnumerable<LeaveDto> Leaves { get; }
+
     }
    
 

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using Employees.Data.Entities;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Leaves.Data.Entities
 {
@@ -26,6 +27,16 @@ namespace Leaves.Data.Entities
         public int EmployeeId { get; set; }
 
         public virtual ICollection<LeaveApprovalHistory> ApprovalHistory { get; set; }
+
+        public bool HasFeedbackByHumanResource()
+        {
+            return this.ApprovalHistory.Any(o => o.ApprovalStatus == ApprovalStatus.ApprovedBySM || o.ApprovalStatus == ApprovalStatus.RejectedBySM);
+        }
+
+        public bool HasFeedbackByScrumMaster()
+        {
+            return this.ApprovalHistory.Any(o => o.ApprovalStatus == ApprovalStatus.ApprovedBySM || o.ApprovalStatus == ApprovalStatus.RejectedBySM);
+        }
 
         public bool HumanResourceDeptApproved(int hrStaffEmployeeId, string currentUsername)
         {

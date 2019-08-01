@@ -26,6 +26,7 @@ namespace Leaves.Controllers.API
         {
             
             var data = new LeaveModelFactory().LoadAll(Storage, page, size)?.Leaves;
+            
             int count = data.Count();
 
             return Ok(new
@@ -106,13 +107,23 @@ namespace Leaves.Controllers.API
             if (leave == null)
                 return this.NotFound(new { success = false });
 
-            // TODO : find correct Employee ID from Username
-            leave.ScrumMasterApproved(10, GetCurrentUserName());
+            if (leave.HasFeedbackByScrumMaster() || leave.HasFeedbackByHumanResource())
+                this.ModelState.AddModelError("id", "Already have feedback by Scrum Master or HR");
 
-            this.Storage.Save();
+            if (this.ModelState.IsValid)
+            {
 
-            return Ok(new { success = true});
+                // TODO : find correct Employee ID from Username
+                leave.ScrumMasterApproved(10, GetCurrentUserName());
+
+                this.Storage.Save();
+
+                return Ok(new { success = true });
+            }
+            else
+                return BadRequest();
         }
+
         [HttpPost("{id:int}/rejectedby-sm")]
         public IActionResult  RejectedByScrumMaster([FromRoute]int id)
         {
@@ -121,10 +132,16 @@ namespace Leaves.Controllers.API
             Leave leave = repo.WithKey(id);
             if (leave == null)
                 return this.NotFound(new { success = false });
+            if (leave.HasFeedbackByScrumMaster() || leave.HasFeedbackByHumanResource())
+                this.ModelState.AddModelError("id", "Already have feedback by Scrum Master or HR");
 
-            leave.ScrumMasterRejected(10, GetCurrentUserName());
-            this.Storage.Save();
-            return Ok(new { success = true });
+            if(ModelState.IsValid)
+            {
+                leave.ScrumMasterRejected(10, GetCurrentUserName());
+                this.Storage.Save();
+                return Ok(new { success = true });
+            }
+            return BadRequest();
         }
 
         [HttpPost("{id:int}/approveby-hr")]
@@ -138,11 +155,18 @@ namespace Leaves.Controllers.API
 
             if (leave == null)
                 return this.NotFound(new { success = false });
+            if (leave.HasFeedbackByScrumMaster() || leave.HasFeedbackByHumanResource())
+                this.ModelState.AddModelError("id", "Already have feedback by Scrum Master or HR");
 
-            leave.HumanResourceDeptApproved(20, GetCurrentUserName());
-            this.Storage.Save();
+            if(ModelState.IsValid)
+            {
+                leave.HumanResourceDeptApproved(20, GetCurrentUserName());
+                this.Storage.Save();
 
-            return Ok(new { success = true });
+                return Ok(new { success = true });
+            }
+            return BadRequest();
+            
         }
         
         [HttpPost("{id:int}/rejectedby-hr")]
@@ -153,10 +177,18 @@ namespace Leaves.Controllers.API
             Leave leave = repo.WithKey(id);
             if (leave == null)
                 return this.NotFound(new { success = false });
-            leave.HumanResourceDeptRejected(20, GetCurrentUserName());
+            if (leave.HasFeedbackByScrumMaster() || leave.HasFeedbackByHumanResource())
 
-            this.Storage.Save();
-            return Ok(new { success = true });
+                this.ModelState.AddModelError("id", "Already have feedback by Srum Master or HR");
+
+            if (ModelState.IsValid)
+            {
+                leave.HumanResourceDeptRejected(20, GetCurrentUserName());
+
+                this.Storage.Save();
+                return Ok(new { success = true });
+            }
+            return BadRequest();
         }
 
         [HttpPut("{id:int}")]
